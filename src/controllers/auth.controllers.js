@@ -25,46 +25,6 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
-// const generateAccessAndRefreshToken = async (userId) => {
-//   try {
-//     console.log('🔹 Received userId:', userId);
-
-//     const user = await User.findById(userId);
-//     console.log('🔹 User found:', user);
-
-//     if (!user) {
-//       throw new ApiError(404, 'User not found for token generation');
-//     }
-
-//     if (typeof user.generateAccessToken !== 'function') {
-//       throw new ApiError(
-//         500,
-//         'generateAccessToken() is NOT defined in User model',
-//       );
-//     }
-//     if (typeof user.generateRefreshToken !== 'function') {
-//       throw new ApiError(
-//         500,
-//         'generateRefreshToken() is NOT defined in User model',
-//       );
-//     }
-
-//     const accessToken = user.generateAccessToken();
-//     const refreshToken = user.generateRefreshToken();
-//     console.log('🔹 Tokens generated:', { accessToken, refreshToken });
-
-//     user.refreshToken = refreshToken;
-//     await user.save({ validateBeforeSave: false });
-//     return { accessToken, refreshToken };
-//   } catch (error) {
-//     console.error('❌ REAL ERROR:', error);
-//     throw new ApiError(
-//       500,
-//       error.message || 'Something went wrong while generating access token!',
-//     );
-//   }
-// };
-
 const registerUser = asyncHandler(async (req, res) => {
   const { email, username, password, role } = req.body;
 
@@ -102,7 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   const createdUser = await User.findById(user._id).select(
-    '-password -refreshToken -emailVerificationToken -emailVarificationExpiry',
+    '-password -refreshToken -emailVerificationToken -emailVerificationExpiry',
   );
 
   if (!createdUser) {
@@ -382,7 +342,7 @@ const resetForgotPassword = asyncHandler(async (req, res) => {
   user.forgotPasswordExpiry = undefined;
 
   user.password = newPassword;
-  await user.save({ validateBeforeSave: false });
+  await user.save({ reBeforeSave: false });
 
   return res
     .status(200)

@@ -7,6 +7,7 @@ dotenv.config({
 });
 
 const port = process.env.PORT || 3000;
+console.log('MONGO_URI: ', process.env.MONGO_URI);
 
 connectDB()
   .then(() => {

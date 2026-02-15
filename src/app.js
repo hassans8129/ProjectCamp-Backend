@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import { ApiError } from './utils/Api_error.js';
 
 const app = express();
 
@@ -35,6 +36,25 @@ app.use('/api/v1/auth', authRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
+});
+
+// Error handling middleware (this catches all errors passed to next())
+app.use((err, req, res, next) => {
+  // If it's your custom ApiError
+  if (err instanceof ApiError) {
+    return res.status(err.statusCode).json({
+      success: err.success,
+      message: err.message,
+      errors: err.errors,
+    });
+  }
+
+  // For mongoose errors or other unexpected errors
+  return res.status(500).json({
+    success: false,
+    message: err.message || 'Internal Server Error',
+    errors: [],
+  });
 });
 
 export default app;

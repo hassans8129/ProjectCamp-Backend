@@ -17,5 +17,7 @@ export const validate = (req, res, next) => {
         [err.path]: err.msg, // PUSHING IN LIKE AN OBJECT, SO THAT WE GET THE PATH AS WELL AS ERROR MESSAGE
       }),
   );
-  throw new ApiError(422, 'Recived data is not valid!');
+  return next(
+    new ApiError(422, 'Received data is not valid!', extractedErrors),
+  );
 };
