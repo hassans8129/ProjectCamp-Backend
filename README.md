@@ -21,7 +21,7 @@ Designed with production-grade security including JWT authentication, email veri
 - Protected routes with role-ready structure
 
 ## 📌 Project Structure
-
+```
 src/
 ├─ controllers/
 ├─ middlewares/
@@ -29,4 +29,5 @@ src/
 ├─ routes/
 ├─ validators/
 ├─ utils/
+```
 # ProjectCamp-Backend
